@@ -1,4 +1,7 @@
-﻿namespace Lab_1
+using System;
+using System.Collections.Generic;
+
+namespace Lab_1
 {
     class RootOnSegment
     {
@@ -30,11 +33,11 @@
         {
             List<RootOnSegment> roots = new List<RootOnSegment>();
 
-            double leftBound = - Math.PI / 2; // початкове значення лівого краю першого сегменту (1/10 проміжку)
-            double step = Math.PI / 10; // значення кроку (1/10 проміжку)
+            double leftBound = - 2.5; // початкове значення лівого краю першого сегменту (1/10 проміжку)
+            double step = 2 * 2.5 / 60; // значення кроку (1/10 проміжку)
             double rightBound = leftBound + step;  // початкове значення правого краю першого сегменту (1/10 проміжку)
 
-            for (int i = 0; i < 10; i++) // для кожного з 10-ти сегментів
+            for (int i = 0; i < 60; i++) // для кожного з 10-ти сегментів
             {
                 double rootOfSubsegment = 0; // змінна для зберігання кореня в сегменті
 
@@ -55,10 +58,12 @@
                 else if (Math.Sign(yLeft) != Math.Sign(func(xRight))) // якщо знаки функції на границях сегменту різні, використовуємо метод хорд для уточнення кореня
                 {
                     bool forceStop = false; // булева змінна для випадку, коли обчислене значення аргументу всередині сегменту і є коренем
+                    double xMid = xLeft - func(xLeft) * ((xRight - xLeft) / (func(xRight) - func(xLeft))); // обчислення аргументу за методом хорд
+                    rootOfSubsegment = xMid;
 
-                    while (Math.Abs(xRight - xLeft) > 0.01 | forceStop) // допоки не досягнута точність 0.01 або обчислене значення аргументу і є коренем
+                    while (Math.Abs(func(xMid)) > 0.01 | forceStop) // допоки не досягнута точність 0.01 або обчислене значення аргументу і є коренем
                     {
-                        double xMid = xLeft - func(xLeft) * ((xRight - xLeft) / (func(xRight) - func(xLeft))); // обчислення аргументу за методом хорд
+                        
                         double yMid = func(xMid); // обчислення значення фунціїї для щойно знайденого аргументу
 
                         if (yMid == 0) // коли аргумент проміжної точки є коренем
@@ -79,6 +84,8 @@
 
                             rootOfSubsegment = xLeft;
                         }
+                        
+                        xMid = xLeft - func(xLeft) * ((xRight - xLeft) / (func(xRight) - func(xLeft))); // обчислення аргументу за методом хорд
                     }
 
                     roots.Add(new RootOnSegment(rootOfSubsegment, leftBound, rightBound)); // після досягнення заданої точності додаємо розв'язок у список
