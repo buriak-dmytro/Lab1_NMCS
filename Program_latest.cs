@@ -96,38 +96,25 @@ namespace Lab_1
             double yLeft = func(leftBoundX);
             double yRight = func(rightBoundX);
 
-            bool IsXMidRoot = false;
-
             double xMid = XMid(xLeft, xRight);
 
-            while (Math.Abs(func(xMid)) > epsilon & !IsXMidRoot)
+            while (Math.Abs(func(xMid)) > epsilon & func(xMid) != 0)
             {
                 double yMid = func(xMid);
 
-                if (yMid == 0)
+                if (Math.Sign(yLeft) != Math.Sign(yMid))
                 {
-                    roots.Add(xMid);
-                    IsXMidRoot = true;
+                    xRight = xMid;
                 }
                 else
                 {
-                    if (Math.Sign(yLeft) != Math.Sign(yMid))
-                    {
-                        xRight = xMid;
-                    }
-                    else
-                    {
-                        xLeft = xMid;
-                    }
+                    xLeft = xMid;
                 }
 
                 xMid = XMid(xLeft, xRight);
             }
 
-            if (!IsXMidRoot)
-            {
-                roots.Add(xLeft);
-            }
+            roots.Add(xMid);
         }
         
         static double func(double x)
@@ -155,7 +142,7 @@ namespace Lab_1
 
         static void Main(string[] args)
         {
-            Subdivide(10, -Math.PI, Math.PI);
+            Subdivide(10, -Math.PI / 2, Math.PI / 2);
 
             Output();
 
